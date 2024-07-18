@@ -2,11 +2,24 @@
 let humanScore = 0;
 let computerScore = 0;
 
-// Function to prompt user for their choice (case insensitive)
-function getUserChoice() {
-    let userChoice = prompt("It's really quite simple. Scissors cuts Paper. Paper covers Rock. Rock crushes Lizard. Lizard poisons Spock. Spock smashes Scissors. Scissors decapitates Lizard. Lizard eats Paper. Paper disproves Spock. Spock vaporizes Rock. and as it always has Rock crushes Scissors", "").toLowerCase();
+// Button functionality
+const rock = document.querySelector("#Rock");
+const paper = document.querySelector("#Paper");
+const scissors = document.querySelector("#Scissors");
+const lizard = document.querySelector("#Lizard");
+const spock = document.querySelector("#Spock");
+
+let userChoice = "";
+function getUserChoice(choice) {
+    userChoice = choice;
     return userChoice;
 }
+
+rock.addEventListener("click", () => handleUserChoice("rock"));
+paper.addEventListener("click", () => handleUserChoice("paper"));
+scissors.addEventListener("click", () => handleUserChoice("scissors"));
+lizard.addEventListener("click", () => handleUserChoice("lizard"));
+spock.addEventListener("click", () => handleUserChoice("spock"));
 
 // Function to get computer's choice
 function getComputerChoice() {
@@ -27,63 +40,8 @@ function getComputerChoice() {
     return computerChoice;
 }
 
-// Get user's choice with validation
-function getUserChoiceWithValidation() {
-    let userChoice = getUserChoice();
-
-    // Validate user input
-    while (
-        userChoice !== "rock" &&
-        userChoice !== "paper" &&
-        userChoice !== "scissors" &&
-        userChoice !== "lizard" &&
-        userChoice !== "spock"
-    ) {
-        alert("That's not how you play! Please choose one of: Rock, Paper, Scissors, Lizard, or Spock");
-        userChoice = getUserChoice();
-    }
-
-    return userChoice;
-}
-
-// Game loop to play multiple rounds
-function playGame() {
-    let playAgain = true;
-
-    while (playAgain) {
-        // Get user's validated choice
-        let userChoice = getUserChoiceWithValidation();
-        console.log("User chose:", userChoice);
-
-        // Get computer's choice
-        let computerChoice = getComputerChoice();
-        console.log("Computer chose:", computerChoice);
-
-        // Determine the winner based on choices (case insensitive)
-        let result = determineWinner(userChoice, computerChoice);
-        console.log(result);
-
-        // Display scores after each round
-        console.log("Human Score:", humanScore);
-        console.log("Computer Score:", computerScore);
-
-        // Ask if user wants to play again
-        playAgain = confirm("Do you want to play again?");
-    }
-
-    // Show final scores when the game ends
-    console.log("Final Scores:");
-    console.log("Human Score:", humanScore);
-    console.log("Computer Score:", computerScore);
-}
-
-// Determine the winner based on choices (case insensitive)
+// Determine the winner based on choices
 function determineWinner(userChoice, computerChoice) {
-    // Convert choices to lowercase for case insensitive comparison
-    userChoice = userChoice.toLowerCase();
-    computerChoice = computerChoice.toLowerCase();
-
-    // Implement your game logic here
     if (userChoice === computerChoice) {
         return "It's a tie!";
     } else if (
@@ -103,5 +61,24 @@ function determineWinner(userChoice, computerChoice) {
     }
 }
 
-// Start the game loop
-playGame();
+// Function to handle user choice
+function handleUserChoice(choice) {
+    const userChoice = getUserChoice(choice); // use getUserChoice function
+    const computerChoice = getComputerChoice();
+    const result = determineWinner(userChoice, computerChoice);
+
+    // Display choices in the UI
+    document.querySelector("#userChoiceDisplay").textContent = `User chose: ${userChoice}`;
+    document.querySelector("#computerChoiceDisplay").textContent = `Computer chose: ${computerChoice}`;
+    document.querySelector("#result").textContent = `Result: ${result}`;
+
+    // Display results in the UI
+    document.querySelector("#result").textContent = result;
+    document.querySelector("#humanScore").textContent = `Human Score: ${humanScore}`;
+    document.querySelector("#computerScore").textContent = `Computer Score: ${computerScore}`;
+}
+
+// Display initial scores
+document.querySelector("#humanScore").textContent = `Human Score: ${humanScore}`;
+document.querySelector("#computerScore").textContent = `Computer Score: ${computerScore}`;
+document.querySelector("#result").textContent = "Choose your move to start the game!";
